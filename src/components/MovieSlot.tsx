@@ -1,37 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {MovieReactions} from "../models/model";
+import {MoviePage, MovieReactions} from "../models/model";
 import {addHate, addLike} from "../operations/operation";
 
 interface Props {
-    id?: string,
-    title?: string
-    userId: string,
-    username: string,
-    description?: string
-    creationDate?: string,
-    authenticated?: boolean,
-    likes?: number,
-    hates?: number,
+    moviePage: MoviePage,
     uploadedByFilter?: (id: string) => void
 }
 
 const MovieSlot: React.FunctionComponent<Props> = ({
-                                                       id, title, userId,
-                                                       username, description, creationDate,
-                                                       authenticated = false, likes, hates,
+                                                       moviePage,
+                                                       authenticated = false,
                                                        uploadedByFilter
                                                    }) => {
     const [passedDays, setPassedDays] = useState<number>(0)
-    const [numberOfLikes, setNumberOfLikes] = useState(likes);
-    const [numberOfHates, setNumberOfHates] = useState(hates);
+    const [numberOfLikes, setNumberOfLikes] = useState(moviePage.likes);
+    const [numberOfHates, setNumberOfHates] = useState(moviePage.hates);
 
     useEffect(() => {
         const currentDate = new Date();
-        const uploadDate = new Date(creationDate ?? "");
+        const uploadDate = new Date(moviePage.creationDate ?? "");
         let differenceInTime = currentDate.getTime() - uploadDate.getTime();
         differenceInTime = Math.floor(differenceInTime / (1000 * 3600 * 24));
         setPassedDays(differenceInTime)
-    }, [creationDate])
+    }, [moviePage.creationDate])
 
     const updateReactions = (movieReactions: MovieReactions) => {
         setNumberOfLikes(movieReactions.numberOfLikes);
@@ -39,8 +30,8 @@ const MovieSlot: React.FunctionComponent<Props> = ({
     }
 
     const likeMovie = () => {
-        if (id) {
-            addLike(id)
+        if (moviePage.id) {
+            addLike(moviePage.id)
                 .then(response => {
                     updateReactions(response)
                 })
@@ -49,8 +40,8 @@ const MovieSlot: React.FunctionComponent<Props> = ({
     }
 
     const hateMovie = () => {
-        if (id) {
-            addHate(id)
+        if (moviePage.id) {
+            addHate(moviePage.id)
                 .then(response => {
                     updateReactions(response)
                 })
@@ -71,17 +62,17 @@ const MovieSlot: React.FunctionComponent<Props> = ({
     }
 
     const handleUploadedBy = () => {
-        userId && uploadedByFilter && uploadedByFilter(userId);
+        moviePage.userId && uploadedByFilter && uploadedByFilter(moviePage.userId);
     }
 
 
     return (
         <div className={'movie-card'}>
-            <h2>{title}</h2>
+            <h2>{moviePage.title}</h2>
             <span>Posted by<button className={'link-button'}
-                                   onClick={handleUploadedBy}>{username}</button>
+                                   onClick={handleUploadedBy}>{moviePage.username}</button>
                 {passedDays} day(s) ago</span>
-            <p>{description}</p>
+            <p>{moviePage.description}</p>
             {decideLikesP()}
         </div>
     )

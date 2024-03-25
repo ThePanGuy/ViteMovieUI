@@ -19,7 +19,7 @@ const SecuredMovies: React.FunctionComponent<Props> = ({paging}) => {
         <div className={'main-content'}>
             {!paging.isFetching && !paging.isLoading &&
                 paging.response?.content.map((moviePage: MoviePage, index) => {
-                    return <MovieSlot key={'movie-slot-' + index} {...moviePage} uploadedByFilter={uploadedBy} authenticated/>
+                    return <MovieSlot key={'movie-slot-' + index} moviePage={moviePage} uploadedByFilter={uploadedBy} authenticated/>
                 })
             }
             <RenderPaging {...paging}/>

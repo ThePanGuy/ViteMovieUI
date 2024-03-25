@@ -9,9 +9,9 @@ const Movies: React.FunctionComponent = () => {
 
     return (
         <div>
-            {!paging.isFetching && !paging.isLoading && paging.response !== undefined && paging.response.content !== undefined &&
-                paging.response.content.map((moviePage: MoviePage, index) => {
-                    return <MovieSlot key={'movie-slot-' + index} {...moviePage}/>
+            {!paging.isFetching && !paging.isLoading &&
+                paging.response?.content.map((moviePage: MoviePage, index) => {
+                    return <MovieSlot key={'movie-slot-' + index} moviePage={moviePage}/>
                 })
             }
             <RenderPaging {...paging}/>
