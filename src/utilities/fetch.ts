@@ -18,6 +18,7 @@ export function get<T>(uri: string): Promise<T | any> {
         .then(response => handleRefreshToken(response, refreshRequest))
         .then(parseResponse)
         .then((response: CustomResponse) => {
+            debugger
             if (response.ok) {
                 return resolve(response.json)
             }
@@ -81,11 +82,11 @@ function parseResponse(response: Response): Promise<CustomResponse> {
     return new Promise((resolve, reject) => {
         if (!response.ok) throw new Error('Network response was not OK');
         if (response.status === 204) {
-            return {
+            resolve ({
                 status: response.status,
                 ok: true,
                 json: undefined
-            };
+            });
         }
         response.json()
             .then((json: any) => {
