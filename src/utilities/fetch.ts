@@ -18,7 +18,6 @@ export function get<T>(uri: string): Promise<T | any> {
         .then(response => handleRefreshToken(response, refreshRequest))
         .then(parseResponse)
         .then((response: CustomResponse) => {
-            debugger
             if (response.ok) {
                 return resolve(response.json)
             }

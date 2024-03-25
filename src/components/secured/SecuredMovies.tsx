@@ -15,6 +15,8 @@ const SecuredMovies: React.FunctionComponent<Props> = ({paging}) => {
         paging.filter(filter)
     }
 
+
+
     return (
         <div className={'main-content'}>
             {!paging.isFetching && !paging.isLoading &&

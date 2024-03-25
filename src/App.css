@@ -73,10 +73,23 @@
 .link-button {
   background: none;
   border: none;
-  color: blue; /* or the color you prefer */
+  color: blue;
   text-decoration: underline;
   cursor: pointer;
   font-size: inherit;
+}
+
+.reaction-button {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.reaction-button.reacted {
+  color: blue;
+
 }
 
 .modal {

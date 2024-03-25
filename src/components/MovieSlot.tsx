@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {MoviePage, MovieReactions} from "../models/model";
-import {addHate, addLike} from "../operations/operation";
+import {addHate, addLike, checkForReaction} from "../operations/operation";
 
 interface Props {
     moviePage: MoviePage,
@@ -15,6 +15,7 @@ const MovieSlot: React.FunctionComponent<Props> = ({
     const [passedDays, setPassedDays] = useState<number>(0)
     const [numberOfLikes, setNumberOfLikes] = useState(moviePage.likes);
     const [numberOfHates, setNumberOfHates] = useState(moviePage.hates);
+    const [ownReaction, setOwnReaction] = useState<boolean>()
 
     useEffect(() => {
         const currentDate = new Date();
@@ -24,9 +25,21 @@ const MovieSlot: React.FunctionComponent<Props> = ({
         setPassedDays(differenceInTime)
     }, [moviePage.creationDate])
 
+    useEffect(() => {
+        if (authenticated) {
+            checkOwnReaction()
+        }
+    }, [authenticated, moviePage.id]);
+
     const updateReactions = (movieReactions: MovieReactions) => {
         setNumberOfLikes(movieReactions.numberOfLikes);
         setNumberOfHates(movieReactions.numberOfHates);
+        checkOwnReaction();
+    }
+
+    const checkOwnReaction = () => {
+        checkForReaction(moviePage.id)
+            .then(response => setOwnReaction(response));
     }
 
     const likeMovie = () => {
@@ -51,11 +64,11 @@ const MovieSlot: React.FunctionComponent<Props> = ({
 
     const decideLikesP = () => {
         if (authenticated) {
-            return <p>{numberOfLikes}
-                <button className={'link-button'} onClick={likeMovie}>likes</button>
-                | {numberOfHates}
-                <button className={'link-button'} onClick={hateMovie}>hates</button>
-            </p>
+            return <div>
+                <button className={'reaction-button' + (ownReaction !== undefined && ownReaction ? ' reacted' : '')} onClick={likeMovie}>{numberOfLikes} likes</button>{/*
+                */}|
+                <button className={'reaction-button' + (ownReaction !== undefined && !ownReaction ? ' reacted' : '')} onClick={hateMovie}>{numberOfHates} hates</button>
+            </div>
         } else {
             return <p>{numberOfLikes} Likes | {numberOfHates} Hates</p>
         }
