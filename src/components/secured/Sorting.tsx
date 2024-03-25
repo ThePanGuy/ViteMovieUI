@@ -13,17 +13,22 @@ const Sorting: React.FC<Props> = ({paging}) => {
 
     return (
         <div className={"sort"}>
-            <p style={{display: "flex"}}>Sort by:
-                <button className={'link-button'} onClick={() => handleClick('Likes')}>
+            <div style={{display: "flex", marginTop: "1em", marginBottom: "1em"}}>Sort by:{/*
+            */}
+                <button className={'link-button'} onClick={() => handleClick('likes')}>
                     Likes
-                </button> |
-                <button className={'link-button'} onClick={() => handleClick('Hates')}>
+                </button>
+                |{/*
+                */}
+                <button className={'link-button'} onClick={() => handleClick('hates')}>
                     Hates
-                </button>|
-                <button className={'link-button'} onClick={() => handleClick('Date')}>
+                </button>
+                |{/*
+                */}
+                <button className={'link-button'} onClick={() => handleClick('creationDate')}>
                     Date
                 </button>
-            </p>
+            </div>
         </div>
     );
 }

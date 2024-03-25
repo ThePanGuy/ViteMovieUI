@@ -61,7 +61,7 @@ export const usePaging = <T>(url: string, pageSize: number, initialPage: number 
     const defaultRequest = {page: initialPage, size: pageSize};
 
     const [pages, setPages] = useState<Page[]>()
-    const [pageRequest, setPageRequest] = useState<PagingRequest>(!!initialPagingRequest ? initialPagingRequest : defaultRequest);
+    const [pageRequest, setPageRequest] = useState<PagingRequest>(initialPagingRequest || defaultRequest);
     const [response, setResponse] = useState<PagingResponse<T>>();
     const [isFetching, setIsFetching] = useState<boolean>(false);
 
@@ -73,7 +73,7 @@ export const usePaging = <T>(url: string, pageSize: number, initialPage: number 
         const toPage = isNaN(to) ? initialPage : to;
 
         setPageRequest(
-            !!initialPagingRequest
+            initialPagingRequest
                 ? {...initialPagingRequest, page: toPage, filter: undefined} :
                 {...defaultRequest, page: toPage})
         setResponse(undefined);
@@ -107,7 +107,6 @@ export const usePaging = <T>(url: string, pageSize: number, initialPage: number 
                 })
                 .catch((message) => {
                     console.log(message);
-                    // openToast(message, toast.TYPE.ERROR);
                 }).finally(() => setIsFetching(false));
         }
     };
@@ -227,7 +226,7 @@ export const usePaging = <T>(url: string, pageSize: number, initialPage: number 
     };
 
     const removeFilter = (name: string) => {
-        if (pageRequest.filter && pageRequest.filter.filterItems) {
+        if (pageRequest.filter?.filterItems) {
             const r: PagingRequest = {...pageRequest};
             const idx = r.filter!.filterItems.findIndex(s => s.name === name);
             if (idx > -1) r.filter!.filterItems.splice(idx, 1);
@@ -246,7 +245,7 @@ export const usePaging = <T>(url: string, pageSize: number, initialPage: number 
 
         if (!r.order || r.order.property !== property) {
             r.order = new class implements Order {
-                isAsc: boolean = true;
+                isAsc: boolean = false;
                 property: string = property;
             }()
         } else if (r.order.property === property) {
@@ -257,8 +256,8 @@ export const usePaging = <T>(url: string, pageSize: number, initialPage: number 
     };
 
     const findFilter = (name: string) => {
-        if (pageRequest.filter && pageRequest.filter.filterItems) {
-            return pageRequest.filter!.filterItems.find(f => f.name === name);
+        if (pageRequest.filter?.filterItems) {
+            return pageRequest.filter.filterItems.find(f => f.name === name);
         }
         return null;
     };
@@ -281,7 +280,7 @@ export const usePaging = <T>(url: string, pageSize: number, initialPage: number 
         hasItems: hasItems(),
         reload: reload,
         execute: execute,
-        totalItems: !!response ? response.totalElements : 0,
+        totalItems: response ? response.totalElements : 0,
         pageRequest: pageRequest,
         findFilter: (name: string) => findFilter(name)
     };
