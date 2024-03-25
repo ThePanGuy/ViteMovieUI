@@ -4,7 +4,7 @@ import {refreshToken} from "../operations/authOperation";
 interface CustomResponse {
     status: number,
     ok: boolean,
-    json: { message: String }
+    json: { message: string }
 }
 
 function getAuthToken(): string | null {
@@ -79,6 +79,14 @@ async function handleRefreshToken(response: Response, request: Request) {
 
 function parseResponse(response: Response): Promise<CustomResponse> {
     return new Promise((resolve, reject) => {
+        if (!response.ok) throw new Error('Network response was not OK');
+        if (response.status === 204) {
+            return {
+                status: response.status,
+                ok: true,
+                json: undefined
+            };
+        }
         response.json()
             .then((json: any) => {
                 if (response.status === 403) {
