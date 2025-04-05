@@ -7,8 +7,11 @@ export const login = async (username: string, password: string) => {
         headers: {
             'Content-Type': 'application/json',
         },
+        mode: 'cors',
+        credentials: 'omit',
         body: JSON.stringify({username: username, password: password}),
     });
+    debugger
     if (!response.ok) {
         throw new Error('Login failed');
     }
@@ -19,7 +22,7 @@ export const login = async (username: string, password: string) => {
 
 export const register = async (username: string, password: string) => {
     try {
-        const response = await post('home/sign-up', {username, password});
+        const response = await post('/home/sign-up', {username, password});
         return response.data;
     } catch (error) {
         throw new Error('Registration failed');

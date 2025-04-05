@@ -28,8 +28,8 @@ export function get<T>(uri: string): Promise<T | any> {
 }
 
 export async function post<T>(uri: string, data: any): Promise<T | any> {
-    const request = new Request(Constants.getApiUrl() +uri, headers('POST', JSON.stringify(data)));
-    const refreshRequest = new Request(Constants.getApiUrl() +uri, headers('POST', JSON.stringify(data)));
+    const request = new Request(Constants.getApiUrl() + uri, headers('POST', JSON.stringify(data)));
+    const refreshRequest = new Request(Constants.getApiUrl() + uri, headers('POST', JSON.stringify(data)));
     return new Promise((resolve, reject) => fetch(request)
         .then(response => handleRefreshToken(response, refreshRequest))
         .then(parseResponse)
@@ -81,7 +81,7 @@ function parseResponse(response: Response): Promise<CustomResponse> {
     return new Promise((resolve, reject) => {
         if (!response.ok) throw new Error('Network response was not OK');
         if (response.status === 204) {
-            resolve ({
+            resolve({
                 status: response.status,
                 ok: true,
                 json: undefined

@@ -1,7 +1,7 @@
 import {get, post} from "../utilities/fetch";
 import {MovieReactions} from "../models/model";
 
-export const addLike = (movieId: string): Promise<MovieReactions> => {
+export const addLikeReaction = (movieId: string): Promise<MovieReactions> => {
     return new Promise<MovieReactions>((resolve, reject) => {
         get('/secured/reaction/like/'+movieId)
             .then((response: MovieReactions) => resolve(response))
@@ -9,10 +9,18 @@ export const addLike = (movieId: string): Promise<MovieReactions> => {
     })
 }
 
-export const addHate = (movieId: string): Promise<MovieReactions> => {
+export const addHateReaction = (movieId: string): Promise<MovieReactions> => {
     return new Promise<MovieReactions>((resolve, reject) => {
         get('/secured/reaction/hate/'+movieId)
             .then((response: MovieReactions) => resolve(response))
+            .catch(error => reject(error));
+    })
+}
+
+export const removeReaction = (movieId: string): Promise<MovieReactions> => {
+    return new Promise<MovieReactions>((resolve, reject) => {
+        get('/secured/reaction/remove/' + movieId)
+            .then(response => resolve(response))
             .catch(error => reject(error));
     })
 }

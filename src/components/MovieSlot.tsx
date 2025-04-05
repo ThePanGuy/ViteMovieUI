@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {MoviePage, MovieReactions} from "../models/model";
-import {addHate, addLike, checkForReaction} from "../operations/operation";
+import {addHateReaction, addLikeReaction, checkForReaction, removeReaction} from "../operations/operation";
 
 interface Props {
     moviePage: MoviePage,
@@ -44,7 +44,12 @@ const MovieSlot: React.FunctionComponent<Props> = ({
 
     const likeMovie = () => {
         if (moviePage.id) {
-            addLike(moviePage.id)
+            if (ownReaction === true) {
+                removeMovieReaction();
+                return;
+            }
+
+            addLikeReaction(moviePage.id)
                 .then(response => {
                     updateReactions(response)
                 })
@@ -53,8 +58,12 @@ const MovieSlot: React.FunctionComponent<Props> = ({
     }
 
     const hateMovie = () => {
+        if (ownReaction === false) {
+            removeMovieReaction();
+        }
+
         if (moviePage.id) {
-            addHate(moviePage.id)
+            addHateReaction(moviePage.id)
                 .then(response => {
                     updateReactions(response)
                 })
@@ -62,7 +71,15 @@ const MovieSlot: React.FunctionComponent<Props> = ({
         }
     }
 
-    const decideLikesP = () => {
+    const removeMovieReaction = () => {
+        if (moviePage.id) {
+            removeReaction(moviePage.id)
+                .then(respone => updateReactions(respone))
+                .catch(error => alert(error));
+        }
+    }
+
+    const decideLikes = () => {
         if (authenticated) {
             return <div>
                 <button className={'reaction-button' + (ownReaction !== undefined && ownReaction ? ' reacted' : '')} onClick={likeMovie}>{numberOfLikes} likes</button>{/*
@@ -86,7 +103,7 @@ const MovieSlot: React.FunctionComponent<Props> = ({
                                    onClick={handleUploadedBy}>{moviePage.username}</button>
                 {passedDays} day(s) ago</span>
             <p>{moviePage.description}</p>
-            {decideLikesP()}
+            {decideLikes()}
         </div>
     )
 

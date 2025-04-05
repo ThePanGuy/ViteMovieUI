@@ -22,14 +22,16 @@ export function SignUpPage() {
             setError('Passwords do not match');
             return;
         }
+debugger
 
         try {
             await register(formData.username, formData.password);
 
             await auth.login(formData.username, formData.password);
 
-            navigate('/movies');
+            navigate('/secured');
         } catch (error) {
+            console.log(error);
             setError('Registration failed. Please try again.');
         }
     }

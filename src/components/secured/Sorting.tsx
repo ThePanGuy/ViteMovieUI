@@ -7,7 +7,7 @@ interface Props {
 
 const Sorting: React.FC<Props> = ({paging}) => {
 
-    const handleClick = (property: string) => {
+    const handleSort = (property: string) => {
         paging.sort(property);
     }
 
@@ -15,17 +15,17 @@ const Sorting: React.FC<Props> = ({paging}) => {
         <div className={"sort"}>
             <div style={{display: "flex", marginTop: "1em", marginBottom: "1em"}}>Sort by:{/*
             */}
-                <button className={'link-button'} onClick={() => handleClick('likes')}>
+                <button className={'link-button'} onClick={() => handleSort('likes')}>
                     Likes
                 </button>
                 |{/*
                 */}
-                <button className={'link-button'} onClick={() => handleClick('hates')}>
+                <button className={'link-button'} onClick={() => handleSort('hates')}>
                     Hates
                 </button>
                 |{/*
                 */}
-                <button className={'link-button'} onClick={() => handleClick('creationDate')}>
+                <button className={'link-button'} onClick={() => handleSort('creationDate')}>
                     Date
                 </button>
             </div>
